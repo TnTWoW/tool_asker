@@ -1,0 +1,11 @@
+enabled_gap_types:
+  - missing_required_parameter
+  - missing_api_endpoint
+  - missing_auth
+  - ambiguous_tool_choice
+
+targets:
+  missing_required_parameter: 1000
+  missing_api_endpoint: 1000
+  missing_auth: 1000
+  ambiguous_tool_choice: 1000

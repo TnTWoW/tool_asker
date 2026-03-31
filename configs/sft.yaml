@@ -1,0 +1,21 @@
+experiment_name: itge_v0_soft_three_head_sft
+seed: 42
+
+data:
+  train_path: data/processed/sft_train.jsonl
+  dev_path: data/processed/sft_dev.jsonl
+  test_path: data/processed/sft_test.jsonl
+
+model:
+  base_model: Qwen/Qwen2.5-1.5B-Instruct
+  max_length: 2048
+  lora_r: 16
+  lora_alpha: 32
+  lora_dropout: 0.05
+
+training:
+  learning_rate: 2e-4
+  batch_size: 8
+  gradient_accumulation_steps: 4
+  num_train_epochs: 2
+  warmup_ratio: 0.03

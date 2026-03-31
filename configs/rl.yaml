@@ -1,0 +1,25 @@
+experiment_name: itge_v0_light_rl
+seed: 42
+
+data:
+  env_cases_path: data/processed/rl_env_cases.jsonl
+  sft_checkpoint: checkpoints/sft/latest
+
+objective:
+  optimize_decision: true
+  optimize_slots: true
+  optimize_question_style: false
+  question_template: "Please provide the following information: {slot_list}."
+
+reward_weights:
+  success: 1.0
+  decision_correct: 0.5
+  slot_f1: 0.5
+  num_questions: -0.2
+  hallucination: -1.0
+
+training:
+  algorithm: group_ranking
+  learning_rate: 1e-5
+  batch_size: 16
+  max_steps: 2000
