@@ -12,7 +12,7 @@
 
 原因很简单：
 
-- 这三类最容易从 APIGen 样本自动扰动出来。[arXiv](https://arxiv.org/abs/2406.18518?utm_source=chatgpt.com)
+- 这三类最容易从 APIGen 样本自动扰动出来。
 - 标注最清楚，容易做 rule-based reward。
 - 能直接形成一版论文中最关键的闭环：
    **完整工具调用样本 → 缺口注入 → 模型发问 → 用户补充 → 重新执行**
@@ -96,13 +96,6 @@ APIGen 提供了 3,673 个可执行 API、21 个类别，以及 60,000 条函数
 
 ```
 JSON
-
-
-
-
-
-
-
 
 {
   "id": "apigen_000001",
@@ -213,14 +206,6 @@ JSON
 
 ```
 JSON
-
-
-
-
-
-
-
-
 {
   "id": "gap_000001",
   "base_sample_id": "apigen_000001",
