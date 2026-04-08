@@ -18,12 +18,8 @@ VAL_FILE="${VAL_FILE:-$PROJECT_ROOT/data/verl/rl/val.parquet}"
 PROJECT_NAME="${PROJECT_NAME:-tool-asker-rl}"
 EXPERIMENT_NAME="${EXPERIMENT_NAME:-itge-ppo-qwen2.5-1.5b}"
 ROLLOUT_NAME="${ROLLOUT_NAME:-vllm}"
-RAY_TMPDIR="${RAY_TMPDIR:-$SAVE_PATH/ray_tmp}"
-
-mkdir -p "$RAY_TMPDIR"
 
 PYTHONUNBUFFERED=1 python3 -m verl.trainer.main_ppo \
-  ray_kwargs.ray_init._temp_dir="$RAY_TMPDIR" \
   data.train_files="$TRAIN_FILE" \
   data.val_files="$VAL_FILE" \
   data.train_batch_size="${TRAIN_BATCH_SIZE:-64}" \
