@@ -17,9 +17,13 @@ TRAIN_FILE="${TRAIN_FILE:-$PROJECT_ROOT/data/verl/rl/train.parquet}"
 VAL_FILE="${VAL_FILE:-$PROJECT_ROOT/data/verl/rl/val.parquet}"
 PROJECT_NAME="${PROJECT_NAME:-tool-asker-rl}"
 EXPERIMENT_NAME="${EXPERIMENT_NAME:-itge-ppo-qwen2.5-1.5b}"
-ROLLOUT_NAME="${ROLLOUT_NAME:-hf}"
+ROLLOUT_NAME="${ROLLOUT_NAME:-vllm}"
+RAY_TMPDIR="${RAY_TMPDIR:-$SAVE_PATH/ray_tmp}"
+
+mkdir -p "$RAY_TMPDIR"
 
 PYTHONUNBUFFERED=1 python3 -m verl.trainer.main_ppo \
+  ray_kwargs.ray_init._temp_dir="$RAY_TMPDIR" \
   data.train_files="$TRAIN_FILE" \
   data.val_files="$VAL_FILE" \
   data.train_batch_size="${TRAIN_BATCH_SIZE:-64}" \
@@ -34,8 +38,10 @@ PYTHONUNBUFFERED=1 python3 -m verl.trainer.main_ppo \
   actor_rollout_ref.model.enable_gradient_checkpointing=True \
   actor_rollout_ref.rollout.name="$ROLLOUT_NAME" \
   actor_rollout_ref.rollout.tensor_model_parallel_size="${ROLLOUT_TP_SIZE:-1}" \
+  actor_rollout_ref.rollout.gpu_memory_utilization="${ROLLOUT_GPU_MEMORY_UTILIZATION:-0.4}" \
   actor_rollout_ref.rollout.log_prob_micro_batch_size_per_gpu="${ROLLOUT_LOGPROB_BSZ:-4}" \
   actor_rollout_ref.ref.log_prob_micro_batch_size_per_gpu="${REF_LOGPROB_BSZ:-4}" \
+  actor_rollout_ref.rollout.checkpoint_engine.update_weights_bucket_megabytes=4096 \
   critic.model.path="$MODEL_PATH" \
   critic.optim.lr="${CRITIC_LR:-1e-5}" \
   critic.ppo_micro_batch_size_per_gpu="${CRITIC_MICRO_BATCH_SIZE:-2}" \

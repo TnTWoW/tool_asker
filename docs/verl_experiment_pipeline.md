@@ -64,16 +64,22 @@ RL 阶段使用 quickstart 里的 `verl.trainer.main_ppo`，只是把 reward 换
 bash scripts/run_verl_rl.sh 1 checkpoints/verl_rl checkpoints/verl_sft_merged
 ```
 
-默认脚本更偏“小规模可先跑通”：
+默认脚本现在按当前 VERL 版本的 async rollout 要求走 `vllm`：
 
-- `ROLLOUT_NAME=hf`
+- `ROLLOUT_NAME=vllm`
 - `total_training_steps=200`
 - 自定义 reward：格式解析 + decision correctness + gap type correctness + slot F1 + hallucination penalty
 
-如果你的 VERL 环境已经配好 vLLM，可以切到：
+单卡最小命令：
 
 ```bash
-ROLLOUT_NAME=vllm ROLLOUT_TP_SIZE=1 bash scripts/run_verl_rl.sh 4 checkpoints/verl_rl checkpoints/verl_sft_merged
+bash scripts/run_verl_rl.sh 1 checkpoints/verl_rl checkpoints/verl_sft_merged
+```
+
+如果显存比较紧，可以先收紧 rollout 占用：
+
+```bash
+ROLLOUT_TP_SIZE=1 ROLLOUT_GPU_MEMORY_UTILIZATION=0.3 bash scripts/run_verl_rl.sh 1 checkpoints/verl_rl checkpoints/verl_sft_merged
 ```
 
 ## 5. 推荐实验顺序
@@ -129,6 +135,6 @@ Please provide the reservation ID.
 如果显存比较紧，优先：
 
 - 把模型换成 `Qwen/Qwen2.5-0.5B-Instruct`
-- 把 `ROLLOUT_NAME` 设为 `hf`
+- 降低 `ROLLOUT_GPU_MEMORY_UTILIZATION`
 - 降低 `MICRO_BATCH_SIZE`
 - 降低 `MAX_RESPONSE_LENGTH`
